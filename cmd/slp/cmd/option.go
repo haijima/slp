@@ -14,70 +14,131 @@ func createOptions(rootCmd *cobra.Command, sortOptions *stats.SortOptions) (*opt
 	if err != nil {
 		return nil, err
 	}
+	changedOptions := make([]options.Option, 0)
+	unchangedOptions := make([]options.Option, 0)
 
 	file, err := rootCmd.PersistentFlags().GetString("file")
 	if err != nil {
 		return nil, err
+	}
+	if rootCmd.PersistentFlags().Changed("file") {
+		changedOptions = append(changedOptions, options.File(file))
+	} else {
+		unchangedOptions = append(unchangedOptions, options.File(file))
 	}
 
 	format, err := rootCmd.PersistentFlags().GetString("format")
 	if err != nil {
 		return nil, err
 	}
+	if rootCmd.PersistentFlags().Changed("format") {
+		changedOptions = append(changedOptions, options.Format(format))
+	} else {
+		unchangedOptions = append(unchangedOptions, options.Format(format))
+	}
 
 	sort, err := rootCmd.PersistentFlags().GetString("sort")
 	if err != nil {
 		return nil, err
 	}
-
 	err = sortOptions.SetAndValidate(sort)
 	if err != nil {
 		return nil, err
+	}
+	if rootCmd.PersistentFlags().Changed("sort") {
+		changedOptions = append(changedOptions, options.Sort(sort))
+	} else {
+		unchangedOptions = append(unchangedOptions, options.Sort(sort))
 	}
 
 	reverse, err := rootCmd.PersistentFlags().GetBool("reverse")
 	if err != nil {
 		return nil, err
 	}
+	if rootCmd.PersistentFlags().Changed("reverse") {
+		changedOptions = append(changedOptions, options.Reverse(reverse))
+	} else {
+		unchangedOptions = append(unchangedOptions, options.Reverse(reverse))
+	}
 
 	noHeaders, err := rootCmd.PersistentFlags().GetBool("noheaders")
 	if err != nil {
 		return nil, err
+	}
+	if rootCmd.PersistentFlags().Changed("noheaders") {
+		changedOptions = append(changedOptions, options.NoHeaders(noHeaders))
+	} else {
+		unchangedOptions = append(unchangedOptions, options.NoHeaders(noHeaders))
 	}
 
 	showFooters, err := rootCmd.PersistentFlags().GetBool("show-footers")
 	if err != nil {
 		return nil, err
 	}
+	if rootCmd.PersistentFlags().Changed("show-footers") {
+		changedOptions = append(changedOptions, options.ShowFooters(showFooters))
+	} else {
+		unchangedOptions = append(unchangedOptions, options.ShowFooters(showFooters))
+	}
 
 	limit, err := rootCmd.PersistentFlags().GetInt("limit")
 	if err != nil {
 		return nil, err
+	}
+	if rootCmd.PersistentFlags().Changed("limit") {
+		changedOptions = append(changedOptions, options.Limit(limit))
+	} else {
+		unchangedOptions = append(unchangedOptions, options.Limit(limit))
 	}
 
 	output, err := rootCmd.PersistentFlags().GetString("output")
 	if err != nil {
 		return nil, err
 	}
+	if rootCmd.PersistentFlags().Changed("output") {
+		changedOptions = append(changedOptions, options.Output(output))
+	} else {
+		unchangedOptions = append(unchangedOptions, options.Output(output))
+	}
 
 	matchingGroups, err := rootCmd.PersistentFlags().GetString("matching-groups")
 	if err != nil {
 		return nil, err
+	}
+	if rootCmd.PersistentFlags().Changed("matching-groups") {
+		changedOptions = append(changedOptions, options.CSVGroups(matchingGroups))
+	} else {
+		unchangedOptions = append(unchangedOptions, options.CSVGroups(matchingGroups))
 	}
 
 	filters, err := rootCmd.PersistentFlags().GetString("filters")
 	if err != nil {
 		return nil, err
 	}
+	if rootCmd.PersistentFlags().Changed("filters") {
+		changedOptions = append(changedOptions, options.Filters(filters))
+	} else {
+		unchangedOptions = append(unchangedOptions, options.Filters(filters))
+	}
 
 	pos, err := rootCmd.PersistentFlags().GetString("pos")
 	if err != nil {
 		return nil, err
 	}
+	if rootCmd.PersistentFlags().Changed("pos") {
+		changedOptions = append(changedOptions, options.PosFile(pos))
+	} else {
+		unchangedOptions = append(unchangedOptions, options.PosFile(pos))
+	}
 
 	noSavePos, err := rootCmd.PersistentFlags().GetBool("nosave-pos")
 	if err != nil {
 		return nil, err
+	}
+	if rootCmd.PersistentFlags().Changed("nosave-pos") {
+		changedOptions = append(changedOptions, options.NoSavePos(noSavePos))
+	} else {
+		unchangedOptions = append(unchangedOptions, options.NoSavePos(noSavePos))
 	}
 
 	ps, err := rootCmd.PersistentFlags().GetString("percentiles")
@@ -97,27 +158,53 @@ func createOptions(rootCmd *cobra.Command, sortOptions *stats.SortOptions) (*opt
 		}
 	}
 
+	if rootCmd.PersistentFlags().Changed("percentiles") {
+		changedOptions = append(changedOptions, options.Percentiles(percentiles))
+	} else {
+		unchangedOptions = append(unchangedOptions, options.Percentiles(percentiles))
+	}
+
 	bundleWhereIn, err := rootCmd.PersistentFlags().GetBool("bundle-where-in")
 	if err != nil {
 		return nil, err
+	}
+	if rootCmd.PersistentFlags().Changed("bundle-where-in") {
+		changedOptions = append(changedOptions, options.BundleWhereIn(bundleWhereIn))
+	} else {
+		unchangedOptions = append(unchangedOptions, options.BundleWhereIn(bundleWhereIn))
 	}
 
 	bundleValues, err := rootCmd.PersistentFlags().GetBool("bundle-values")
 	if err != nil {
 		return nil, err
 	}
+	if rootCmd.PersistentFlags().Changed("bundle-values") {
+		changedOptions = append(changedOptions, options.BundleValues(bundleValues))
+	} else {
+		unchangedOptions = append(unchangedOptions, options.BundleValues(bundleValues))
+	}
 
 	noAbstract, err := rootCmd.PersistentFlags().GetBool("noabstract")
 	if err != nil {
 		return nil, err
+	}
+	if rootCmd.PersistentFlags().Changed("noabstract") {
+		changedOptions = append(changedOptions, options.NoAbstract(noAbstract))
+	} else {
+		unchangedOptions = append(unchangedOptions, options.NoAbstract(noAbstract))
 	}
 
 	paginationLimit, err := rootCmd.PersistentFlags().GetInt("page")
 	if err != nil {
 		return nil, err
 	}
+	if rootCmd.PersistentFlags().Changed("page") {
+		changedOptions = append(changedOptions, options.PaginationLimit(paginationLimit))
+	} else {
+		unchangedOptions = append(unchangedOptions, options.PaginationLimit(paginationLimit))
+	}
 
-	var opts *options.Options
+	opts := options.NewOptions(unchangedOptions...)
 	if config != "" {
 		cf, err := os.Open(config)
 		if err != nil {
@@ -125,7 +212,7 @@ func createOptions(rootCmd *cobra.Command, sortOptions *stats.SortOptions) (*opt
 		}
 		defer cf.Close()
 
-		opts, err = options.LoadOptionsFromReader(cf)
+		opts, err = options.LoadOptionsFromReader(opts, cf)
 		if err != nil {
 			return nil, err
 		}
@@ -136,27 +223,7 @@ func createOptions(rootCmd *cobra.Command, sortOptions *stats.SortOptions) (*opt
 		}
 
 		percentiles = opts.Percentiles
-	} else {
-		opts = options.NewOptions()
 	}
 
-	return options.SetOptions(opts,
-		options.File(file),
-		options.Sort(sortOptions.SortType()),
-		options.Reverse(reverse),
-		options.Format(format),
-		options.Limit(limit),
-		options.Output(output),
-		options.NoHeaders(noHeaders),
-		options.ShowFooters(showFooters),
-		options.CSVGroups(matchingGroups),
-		options.Filters(filters),
-		options.PosFile(pos),
-		options.NoSavePos(noSavePos),
-		options.Percentiles(percentiles),
-		options.BundleWhereIn(bundleWhereIn),
-		options.BundleValues(bundleValues),
-		options.NoAbstract(noAbstract),
-		options.PaginationLimit(paginationLimit),
-	), nil
+	return options.SetOptions(opts, changedOptions...), nil
 }

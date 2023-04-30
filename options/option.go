@@ -209,8 +209,7 @@ func SetOptions(options *Options, opt ...Option) *Options {
 	return options
 }
 
-func LoadOptionsFromReader(r io.Reader) (*Options, error) {
-	opts := NewOptions()
+func LoadOptionsFromReader(opts *Options, r io.Reader) (*Options, error) {
 	buf, err := io.ReadAll(r)
 	if err != nil {
 		return nil, err
